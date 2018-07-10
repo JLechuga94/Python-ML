@@ -1,6 +1,6 @@
 import pandas
 
-data = pandas.read_csv("../datasets/titanic/titanic3.csv")
+data = pandas.read_csv("../../datasets/titanic/titanic3.csv")
 
 def createDummies(dataset, var_name):
     print(dataset.head(10))

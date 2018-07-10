@@ -2,7 +2,7 @@ import pandas
 import matplotlib.pyplot as plt
 
 
-data = pandas.read_csv("../datasets/customer-churn-model/Customer Churn Model.txt")
+data = pandas.read_csv("../../datasets/customer-churn-model/Customer Churn Model.txt")
 # print(data.head())
 
 figure, axs = plt.subplots(2,2, sharey=True, sharex=True)

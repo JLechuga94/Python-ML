@@ -1,7 +1,7 @@
 import pandas
 import os
 
-data = pandas.read_csv("../datasets/titanic/titanic3.csv")
+data = pandas.read_csv("../../datasets/titanic/titanic3.csv")
 # print(data.head())
 # print(data.tail())
 

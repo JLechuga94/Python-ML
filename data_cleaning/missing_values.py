@@ -1,6 +1,6 @@
 import pandas
 
-data = pandas.read_csv("../datasets/titanic/titanic3.csv")
+data = pandas.read_csv("../../datasets/titanic/titanic3.csv")
 
 # axis = 0 means rows, axis = 1 means columns how='all' deletes only if all values
 # in the row/column are NaN, how='any' deletes the row/column if any value is NaN

@@ -1,7 +1,7 @@
 import tabview
 import pandas
-infile = "../datasets/customer-churn-model/Customer Churn Model.txt"
-outfile = "../datasets/customer-churn-model/Tab Customer Churn Model.txt"
+infile = "../../datasets/customer-churn-model/Customer Churn Model.txt"
+outfile = "../../datasets/customer-churn-model/Tab Customer Churn Model.txt"
 
 with open(infile, "r") as infile1:
     with open(outfile, "w") as outfile1:

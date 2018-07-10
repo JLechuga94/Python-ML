@@ -1,6 +1,6 @@
 import pandas
 
-mainpath = "../datasets/"
+mainpath = "../../datasets/"
 filename = "titanic/titanic3.xls"
 
 titanic3 = pandas.read_excel(mainpath + filename)

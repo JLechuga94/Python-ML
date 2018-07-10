@@ -1,7 +1,7 @@
 import pandas
 import matplotlib.pyplot as plt
 import numpy as np
-data = pandas.read_csv("../datasets/customer-churn-model/Customer Churn Model.txt")
+data = pandas.read_csv("../../datasets/customer-churn-model/Customer Churn Model.txt")
 # print(data.head())
 
 # Sturges law to adequate number of divisions for size of sample
