@@ -1,5 +1,7 @@
 import pandas
 import matplotlib.pyplot as plt
+
+
 data = pandas.read_csv("../datasets/customer-churn-model/Customer Churn Model.txt")
 # print(data.head())
 
