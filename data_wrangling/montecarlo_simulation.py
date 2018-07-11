@@ -1,6 +1,6 @@
 import numpy as np
 
-n = 1000
+n = 10000
 pi_approximations = []
 for iteration in range(100):
     success = 0
