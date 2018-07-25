@@ -1,56 +1,63 @@
-import glob
 import os
-import librosa.display
+import librosa
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import specgram
+# import matplotlib.pyplot as plt
+import pandas
+import re
 
-def load_sound_files(file):
-    return librosa.load(file)
+global_path = "../../../../../../Downloads/datasets/CHALLENGE/"
 
-def plot_waves(data, sampling_rate):
-    # plt.figure(figsize=(12, 4))
-    librosa.display.waveplot(data, sr=sampling_rate)
+def load_sound_files(folder_path):
+    files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
+    audio_files = [librosa.load(folder_path + file_name) for file_name in files_names]
+    files_names = [name.split(".")[0] for name in files_names]
+    return audio_files, files_names
+
+def fourier(audio_files):
+    data_frame = []
+    # fig, ax = plt.subplots(len(audio_files), 2, figsize=(20,8))
+    for index, audio_files in enumerate(audio_files):
+        print(index)
+        data = audio_files[0]
+        sampling_rate = audio_files[1]
+
+        Fs = sampling_rate;  # sampling rate
+        Ts = 1.0/Fs; # sampling interval
+        t = np.arange(0,len(data), 1) # time vector
+        y = data
+
+        n = len(y) # length of the signal
+        k = np.arange(n)
+        T = n/Fs
+        frq = k/T # two sides frequency range
+        div = int(n/2)
+        div = 8000
+        frq = frq[range(div)] # one side frequency range
+        Y = np.fft.fft(y)/n # fft computing and normalization
+        Y = Y[range(div)]
+
+        data_frame.append(Y)
+
+    #     ax[index][0].plot(t, y)
+    #     ax[4][0].set_xlabel('Time')
+    #     ax[4][0].set_ylabel('Amplitude')
+    #     ax[index][1].plot(frq,abs(Y),'r') # plotting the spectrum
+    #     ax[4][1].set_xlabel('Freq (Hz)')
+    #     ax[4][1].set_ylabel('|Y(freq)|')
     # plt.show()
-    # i = 1
-    # fig = plt.figure(figsize=(25,60), dpi = 900)
-    # for n,f in zip(sound_names,raw_sounds):
-    #     plt.subplot(10,1,i)
-    #     librosa.display.waveplot(np.array(f),sr=22050)
-    #     plt.title(n.title())
-    #     i += 1
-    # plt.suptitle('Figure 1: Waveplot',x=0.5, y=0.915,fontsize=18)
-    # plt.show()
-def fourier(data, sampling_rate):
-    Fs = sampling_rate;  # sampling rate
-    Ts = 1.0/Fs; # sampling interval
-    t = np.arange(0,len(data),1) # time vector
-    y = data
+    return data_frame
 
-    n = len(y) # length of the signal
-    k = np.arange(n)
-    T = n/Fs
-    frq = k/T # two sides frequency range
-    div = int(n/2)
-    frq = frq[range(div)] # one side frequency range
+def create_dataframe(dataframe_data, label, file_names):
+    for index, audio_data in enumerate(dataframe_data):
+        data = pandas.DataFrame({
+            "Y_values_real": audio_data.real,
+            "Y_values_imaginary": audio_data.imag
+        })
+        data.to_csv(global_path + "Aaudio_csv_{}/{}.csv".format(label, file_names[index]))
 
-    Y = np.fft.fft(y)/n # fft computing and normalization
-    Y = Y[range(div)]
-    print(len(Y))
+        # print(data.head())
+        print(data.shape)
 
-    fig, ax = plt.subplots(2, 1)
-    ax[0].plot(t, y)
-    ax[0].set_xlabel('Time')
-    ax[0].set_ylabel('Amplitude')
-    ax[1].plot(frq,abs(Y),'r') # plotting the spectrum
-    ax[1].set_xlabel('Freq (Hz)')
-    ax[1].set_ylabel('|Y(freq)|')
-    plt.show()
-
-
-data, sampling_rate = load_sound_files("201105021804.wav")
-# print(data, sampling_rate)
-# print(len(data))
-# print(len(data)/(sampling_rate))
-# plot_waves(data, sampling_rate)
-fourier(data, sampling_rate)
+audio_files, file_names = load_sound_files(global_path + "Atraining_extrahls/")
+dataset = fourier(audio_files)
+create_dataframe(dataset, "extrahls", file_names)
