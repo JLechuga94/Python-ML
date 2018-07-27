@@ -40,7 +40,7 @@ def fourier(audio_files):
         Y = np.fft.fft(y)
         for element in Y:
             # print(element)
-            element = element/np.sum(Y)*1000
+            element = element/np.sum(Y)
             # print(element)
         print(Y)
         # min_max_scaler = preprocessing.MinMaxScaler()
