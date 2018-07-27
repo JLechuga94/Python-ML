@@ -7,7 +7,7 @@ import re
 import scipy
 from sklearn import preprocessing
 
-global_path = "../../../../../../Downloads/datasets/CHALLENGE/"
+global_path = "../../../../../Downloads/CHALLENGE/"
 # global_path = "audio_files/"
 
 def load_sound_files(folder_path):
@@ -38,13 +38,14 @@ def fourier(audio_files):
         i, = np.where(frq > 2500.0)
         frq = frq[range(i[0])]
         Y = np.fft.fft(y)
-        for element in Y:
+        Y = Y/np.linalg.norm(Y)
+
+        # for element in Y:
+        #     # print(element)
+        #     element = element/np.sum(Y)*1000
             # print(element)
-            element = element/np.sum(Y)
-            # print(element)
-        print(Y)
-        # min_max_scaler = preprocessing.MinMaxScaler()
-        # Y = min_max_scaler.fit_transform(Y)
+        # print(Y)
+
 
         # Y = [number/scipy.linalg.norm(Y) for number in Y]# fft computing and normalization
         Y = Y[range(i[0])]
@@ -67,8 +68,11 @@ def create_dataframe(dataframe_data, label, file_names):
         print(data.shape)
 
 def graph(x, y):
+    # min_max_scaler = preprocessing.MinMaxScaler()
+    # Y = min_max_scaler.fit_transform(y)
     fig, ax = plt.subplots(len(x), 1, squeeze=False)
     for index in range(len(x)):
+        print(np.max(y[index]))
         ax[index][0].plot(x[index],abs(y[index]),'r') # plotting the spectrum
         # ax[index][0].set_ylim([0,1]) # plotting the spectrum
         # ax[index][1].set_xlabel('Freq (Hz)')
