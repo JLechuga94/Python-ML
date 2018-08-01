@@ -1,9 +1,19 @@
+import numpy as np
+
+X = np.array(range(10)).reshape(10, 1)
+# print(X)
+Y = [0, 0, 0, 0, 1, 0, 1, 0, 1, 1]
+bias = np.ones(10).reshape(10, 1)
+X_new = np.append(X, bias, axis=1)
+# print(X_new)
+
+
 def likelihood(y, pi):
     import numpy as np
     total_sum = 1
-    sum_in = range(1, len(i + 1))
+    sum_in = list(range(1, len(y) + 1))
     for i in range(len(y)):
-        sum_in[i] = np.where(y[i] == 1, pi, 1 - pi)
+        sum_in[i] = np.where(y[i] == 1, pi[i], 1 - pi[i])
         total_sum = total_sum * sum_in[i]
     return total_sum
 
@@ -12,8 +22,8 @@ def logitprobs(X, beta):
     X_shape = np.shape(X)
     n_rows = X_shape[0]
     n_cols = X_shape[1]
-    pi = range(1, n_rows + 1)
-    expon = range(1, rows + w)
+    pi = list(range(1, n_rows + 1))
+    expon = list(range(1, n_rows + 1))
     for i in range(n_rows):
         expon[i] = 0
         for j in range(n_cols):
@@ -43,18 +53,19 @@ def logistics(X, Y, limit):
     root_dif = np.array(range(1, n_cols + 1)).reshape(n_cols, 1)
     iter_i = 1000
     while(iter_i > limit):
-        print(str(iter_i) + ", " + str(limit))
+        print("Iter i: "+str(iter_i) + ", limit: " + str(limit))
         pi = logitprobs(X_new, beta) # probabilidades del paso actual
-        print(pi)
+        print("Pi: "+str(pi))
         W = findW(pi)
-        print(W)
+        print("W: "+str(W))
         # La traspuesta es para pasar a columnas para poder hacer las multiplicaciones
         num = (np.transpose(np.matrix(X_new))*np.matrix(Y - np.transpose(pi)).transpose())
         den = (np.matrix(np.transpose(X_new))*np.matrix(X_new))
         root_dif = np.array(linalg.inv(den)*num)
         beta = beta + root_dif
-        print(beta)
+        print("Beta: "+str(beta))
         iter_i = np.sum(root_dif*root_dif)
-        print(iter_i)
         ll = likelihood(Y, pi)
     return beta
+
+a = logistics(X, Y, 0.00001)
