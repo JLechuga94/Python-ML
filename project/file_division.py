@@ -1,11 +1,22 @@
 import os
 
-global_path = "../../../../../../Downloads/datasets/MITDATASET/training-b/RECORDS-normal"
 
-f = open(global_path, 'r')
-print(f.read())
-lista = [name for name in f]
+counter = 0
+tag = "abnormal"
+training = "c/"
 
-lines = [line.rstrip('\n') for line in open(global_path)]
+global_path = "../../../../../../Downloads/datasets/MITDATASET/training-" + training
 
-print(lines)
+tag_type = "RECORDS-" + tag
+
+lines = [line.rstrip('\n')+ ".wav" for line in open(global_path + tag_type)]
+print("Amount of files for type: " + tag)
+print(len(lines))
+files_names = sorted(os.listdir(global_path))[1:]
+
+for file_name in files_names:
+    if file_name in lines:
+        counter += 1
+        os.rename(global_path + file_name, global_path + tag + "/" + file_name)
+print("Amount of files moved for type: " + tag)
+print(counter)
