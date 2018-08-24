@@ -7,14 +7,9 @@ import re
 import scipy
 from sklearn import preprocessing
 
-# global_path = "../../../../../Downloads/CHALLENGE/"
-global_path = "../../../../../../Downloads/datasets/CHALLENGE/"
-# global_path = "audio_files/"
-file_type = "normal"
-
 def load_sound_files(folder_path):
     files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
-    audio_files = [librosa.load(folder_path + file_name, duration=5.0) for file_name in files_names]
+    audio_files = [librosa.load(folder_path + file_name, duration=3.0) for file_name in files_names]
     files_names = [name.split(".")[0] for name in files_names]
     return audio_files, files_names
 
@@ -25,14 +20,13 @@ def fourier(audio_files):
     original_y = []
     for index, audio_files in enumerate(audio_files):
         print("File index: " + str(index))
+        print("Number of datapoints for audio file", len(data))
         data = audio_files[0]
-        print(len(data))
         sampling_rate = audio_files[1]
 
         Fs = sampling_rate;  # sampling rate
         Ts = 1.0/Fs; # sampling interval
         t = np.arange(0, 1, Ts) # time vector
-        print(len(t))
         y = data
 
         n = len(y) # length of the signal
@@ -50,11 +44,11 @@ def fourier(audio_files):
         Y = [element/np.max(Y) for element in Y]
         # print(len(t))
         # print(len(y))
-        y = y[:len(t)]
+        # y = y[:len(t)]
         data_frame_x.append(frq)
         data_frame_y.append(Y)
-        original_x.append(t)
-        original_y.append(y)
+        # original_x.append(t)
+        # original_y.append(y)
 
     return data_frame_x, data_frame_y, original_x, original_y
 
@@ -82,20 +76,36 @@ def concat_csv(folder_path):
     files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
     csv_files = [pandas.read_csv(folder_path + file_name) for file_name in files_names]
     new_csv = pandas.concat(csv_files,index=False, ignore_index=True)
-    new_csv.to_csv(folder_path + "global.csv")
+    new_csv.to_csv(folder_path + "COMPLETE.csv")
     return True
 
 def cut_csv(folder_path):
     files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
     csv_file = pandas.read_csv(folder_path + "global.csv")
     new_csv = csv_file.head(26)
-    new_csv.to_csv(folder_path + "global_new.csv")
+    new_csv.to_csv(folder_path + "COMPLETE_CROP.csv")
     return True
+
+# global_path = "../../../../../Downloads/CHALLENGE/"
+global_path = "../../../../../../Downloads/datasets/CHALLENGE/"
+# global_path = "audio_files/"
+file_type = "normal"
+
+patient_type = "abnormal"
+database = "MITDATASET/"
+# specific_database_name = "Atraining_{}/".format(patient_type)
+specific_database_name = "training-a/{}/".format(patient_type)
+
+global_path = "../../../../../../Downloads/datasets/"
+folder_path = global_path + database + specific_database_name
+new_path = global_path + database + "training-a/" + "divided_{}/".format(patient_type)
+
+
 
 # print("Parsing: {} files".format(file_type))
 audio_files, file_names = load_sound_files(global_path + "Atraining_{}/".format(file_type))
 dataset_x, dataset_y, original_x, original_y = fourier(audio_files)
-# create_dataframe(dataset_y, file_type, file_names)
-graph(dataset_x,dataset_y, original_x, original_y)
-# concat_csv(global_path + "csv_{}/".format(file_type))
+create_dataframe(dataset_y, file_type, file_names)
+# graph(dataset_x,dataset_y, original_x, original_y)
+concat_csv(global_path + "csv_{}/".format(file_type))
 # cut_csv(global_path + "csv_{}/".format(file_type))

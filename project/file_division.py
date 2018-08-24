@@ -3,14 +3,15 @@ import os
 
 counter = 0
 tag = "abnormal"
-training = "c/"
+training = "d/"
 
 global_path = "../../../../../../Downloads/datasets/MITDATASET/training-" + training
 
 tag_type = "RECORDS-" + tag
 
 lines = [line.rstrip('\n')+ ".wav" for line in open(global_path + tag_type)]
-print("Amount of files for type: " + tag)
+print("Training: " + training)
+print("Amount of tag lines for type: " + tag)
 print(len(lines))
 files_names = sorted(os.listdir(global_path))[1:]
 
