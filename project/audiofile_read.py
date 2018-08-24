@@ -21,7 +21,7 @@ def fourier(audio_files):
     original_x = []
     original_y = []
     print("\nNumber of files for processing ", len(audio_files))
-    print("Beginning FFT processing...")
+    print("----------Beginning FFT processing----------")
     for index, audio_files in enumerate(audio_files):
         data = audio_files[0]
         sampling_rate = audio_files[1]
@@ -54,17 +54,33 @@ def fourier(audio_files):
         data_frame_y.append(Y)
         # original_x.append(t)
         # original_y.append(y)
-    print("FFT processing terminated.")
+    print("----------FFT processing terminated----------")
     return data_frame_x, data_frame_y, original_x, original_y
 
 def create_dataframe(dataframe_data, label, file_names):
-    print("\nBeginning CSV files creation...")
+    print("\n-----------Beginning CSV files creation-----------")
     for index, audio_data in enumerate(dataframe_data):
         data = pandas.DataFrame(audio_data)
         data = data.transpose()
-        data.to_csv(global_path + "csv_{}/{}.csv".format(label, file_names[index]))
-        print(data.shape)
-    print("CSV files process finished")
+        data.to_csv(database_path + "csv_{}/{}.csv".format(label, file_names[index]))
+        print("Rows | Columns", data.shape)
+    print("-----------CSV files creation finished-----------")
+
+def concat_csv(folder_path):
+    print("\nBeginning CSV files concatenation...")
+    files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
+    csv_files = [pandas.read_csv(folder_path + file_name) for file_name in files_names]
+    new_csv = pandas.concat(csv_files, ignore_index=True, sort=True)
+    new_csv.to_csv(folder_path + "COMPLETE.csv")
+    print("Finished CSV files concatenation")
+    return True
+
+def cut_csv(folder_path):
+    files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
+    csv_file = pandas.read_csv(folder_path + "global.csv")
+    new_csv = csv_file.head(26)
+    new_csv.to_csv(folder_path + "COMPLETE_CROP.csv")
+    return True
 
 def graph(x, y, t, original_y):
     fig, ax = plt.subplots(len(x), 2)
@@ -77,42 +93,28 @@ def graph(x, y, t, original_y):
         ax[index][0].set_ylabel('Amplitude')
         ax[index][1].set_xlabel('Freq (Hz)')
         ax[index][1].set_ylabel('|Y(freq)|')
-    plt.show()
-
-def concat_csv(folder_path):
-    print("\nBeginning CSV files concatenation...")
-    files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
-    csv_files = [pandas.read_csv(folder_path + file_name) for file_name in files_names]
-    new_csv = pandas.concat(csv_files,index=False, ignore_index=True)
-    new_csv.to_csv(folder_path + "COMPLETE.csv")
-    return True
-
-def cut_csv(folder_path):
-    files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
-    csv_file = pandas.read_csv(folder_path + "global.csv")
-    new_csv = csv_file.head(26)
-    new_csv.to_csv(folder_path + "COMPLETE_CROP.csv")
-    return True
+        plt.show()
 
 # global_path = "../../../../../Downloads/"
 global_path = "../../../../../../Downloads/datasets/"
 # global_path = "audio_files/"
-patient_type = "normal"
+patient_type = "abnormal"
 
 database = "CHALLENGE/"
 # database = "MITDATASET/"
 specific_database_name = "Atraining_{}/".format(patient_type)
 # specific_database_name = "training-a/{}/".format(patient_type)
+database_path = global_path + database
 
 
 
 
-print("Database:", database)
+print("Database selected:", database)
 print("Patient type:", patient_type)
-audio_files, file_names = load_sound_files(global_path + database + "divided_{}/".format(patient_type))
+audio_files, file_names = load_sound_files(database_path + "divided_{}/".format(patient_type))
 dataset_x, dataset_y, original_x, original_y = fourier(audio_files)
 create_dataframe(dataset_y, patient_type, file_names)
-concat_csv(global_path + "csv_{}/".format(patient_type))
+concat_csv(database_path + "csv_{}/".format(patient_type))
 # graph(dataset_x,dataset_y, original_x, original_y)
 # cut_csv(global_path + "csv_{}/".format(patient_type))
-print("Finished requested processing of data")
+print("\n\n-----------Finished requested processing of database-----------")
