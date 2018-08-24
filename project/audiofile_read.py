@@ -59,11 +59,14 @@ def fourier(audio_files):
 
 def create_dataframe(dataframe_data, label, file_names):
     print("\n-----------Beginning CSV files creation-----------")
+    counter = 0
     for index, audio_data in enumerate(dataframe_data):
         data = pandas.DataFrame(audio_data)
         data = data.transpose()
         data.to_csv(database_path + "csv_{}/{}.csv".format(label, file_names[index]))
         print("Rows | Columns", data.shape)
+        counter += 1
+    print(counter, "CSV files created")
     print("-----------CSV files creation finished-----------")
 
 def concat_csv(folder_path):
