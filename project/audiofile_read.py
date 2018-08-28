@@ -63,7 +63,7 @@ def create_dataframe(dataframe_data, label, file_names):
     for index, audio_data in enumerate(dataframe_data):
         data = pandas.DataFrame(audio_data)
         data = data.transpose()
-        data.to_csv(database_path + "csv_{}/{}.csv".format(label, file_names[index]))
+        data.to_csv(database_path + "csv_{}/{}.csv".format(label, file_names[index]), index=False)
         print("Rows | Columns", data.shape)
         counter += 1
     print(counter, "CSV files created")
@@ -101,12 +101,10 @@ def graph(x, y, t, original_y):
 # global_path = "../../../../../Downloads/"
 global_path = "../../../../../../Downloads/datasets/"
 # global_path = "audio_files/"
-patient_type = "abnormal"
+patient_type = "normal"
 
-database = "CHALLENGE/"
-# database = "MITDATASET/"
-specific_database_name = "Atraining_{}/".format(patient_type)
-# specific_database_name = "training-a/{}/".format(patient_type)
+# database = "CHALLENGE/"
+database = "MITDATASET/training-a/"
 database_path = global_path + database
 
 
