@@ -9,7 +9,9 @@ from sklearn import preprocessing
 
 def load_sound_files(folder_path):
     print("\nLoading files from selected database...")
-    files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
+    files_names = sorted(os.listdir(folder_path))
+    if files_names[0] == ".DS_Store":
+        files_names = files_names[1:] # Range is done due to DS_store file in index 0
     audio_files = [librosa.load(folder_path + file_name, duration=3.0) for file_name in files_names]
     files_names = [name.split(".")[0] for name in files_names]
     print("Finished loading datafiles")
@@ -86,8 +88,11 @@ def cut_csv(folder_path):
     return True
 
 def graph(x, y, t, original_y):
+    print(len(x))
     fig, ax = plt.subplots(len(x), 2)
     for index in range(len(x)):
+        # print(x[index])
+        # print(y[index])
         # print(np.max(y[index]))
         ax[index][0].plot(t, original_y, 'b') # plotting the spectrum
         ax[index][1].plot(x[index], y[index],'r') # plotting the spectrum
@@ -103,8 +108,8 @@ global_path = "../../../../../../Downloads/datasets/"
 # global_path = "audio_files/"
 patient_type = "abnormal"
 
-database = "CHALLENGE/"
-# database = "MITDATASET/"
+# database = "CHALLENGE/"
+database = "MITDATASET/training-f/"
 specific_database_name = "Atraining_{}/".format(patient_type)
 # specific_database_name = "training-a/{}/".format(patient_type)
 database_path = global_path + database
