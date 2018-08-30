@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 import pandas
 
 
-patient_data = pandas.read_csv("../project/audio_files/COMPLETE_FORMATTED.csv")
+patient_data = pandas.read_csv("../project/audio_files/COMPLETE_ABCDF.csv")
 print(patient_data.head())
 print(patient_data.shape)
 
-train, test = train_test_split(patient_data, test_size=0.2)
+train, test = train_test_split(patient_data, test_size=0.3)
 
 train_labels = train.pop("patient").values
 test_labels = test.pop("patient").values
@@ -23,7 +23,9 @@ test = test.values
 
 model = keras.Sequential([
     # keras.layers.Flatten(input_shape=(1, 7502)),
-    keras.layers.Dense(128, activation=tf.nn.relu),
+    keras.layers.Dense(1024, activation=tf.nn.relu),
+    keras.layers.Dense(64, activation=tf.nn.relu),
+    keras.layers.Dense(64, activation=tf.nn.relu),
     keras.layers.Dense(2, activation=tf.nn.softmax)
 ])
 #
@@ -32,7 +34,11 @@ model.compile(optimizer=tf.train.AdamOptimizer(),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train, numeric_train_labels, epochs=10)
+# model.compile(optimizer=tf.train.RMSPropOptimizer(0.01),
+#             loss=keras.losses.categorical_crossentropy,
+#             metrics=[keras.metrics.categorical_accuracy])
+
+model.fit(train, numeric_train_labels, epochs=10, steps_per_epoch=30)
 test_loss, test_acc = model.evaluate(test, numeric_test_labels)
 
 print('Test accuracy:', test_acc)
