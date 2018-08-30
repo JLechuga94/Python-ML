@@ -3,19 +3,22 @@ import os
 
 glob_div_counter = 0
 
-patient_type = "abnormal"
-database = "MITDATASET/"
-# specific_database_name = "Atraining_{}/".format(patient_type)
-specific_database_name = "training-a/{}/".format(patient_type)
-
 global_path = "../../../../../../Downloads/datasets/"
-folder_path = global_path + database + specific_database_name
-new_path = global_path + database + "training-a/" + "divided_{}/".format(patient_type)
 
-files_names = sorted(os.listdir(folder_path))[1:]
+patient_type = "normal"
+database = "MITDATASET/training-f/"
+# specific_database_name = "Atraining_{}/".format(patient_type)
+specific_database_name = "{}/".format(patient_type)
+
+folder_path = global_path + database + specific_database_name
+new_path = global_path + database + "divided_{}/".format(patient_type)
+
+files_names = sorted(os.listdir(folder_path))
+if files_names[0] == ".DS_Store":
+    files_names = files_names[1:]
 n_sec_segments = 3
 
-print("DATABASE SELECTED FOR DIVISION", database)
+print("Database selected:", database)
 for file in files_names:
     t1 = 0 * 1000
     t2 = n_sec_segments * 1000
