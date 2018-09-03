@@ -4,7 +4,7 @@ import tensorflow as tf
 import pandas
 import numpy as np
 
-patient_data = pandas.read_csv("../project/audio_files/COMPLETE_FORMATTED.csv")
+patient_data = pandas.read_csv("../project/audio_files/COMPLETE_ABCDF.csv")
 print(patient_data.head())
 print(patient_data.shape)
 
@@ -41,7 +41,7 @@ model = keras.Sequential([
 # layers.Dense(64, bias_initializer=keras.initializers.constant(2.0))
 
 model.compile(optimizer=tf.train.AdamOptimizer(),
-              loss='categorical_crossentropy',
+              loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
 # Configure a model for categorical classification.
@@ -50,9 +50,9 @@ model.compile(optimizer=tf.train.AdamOptimizer(),
 #               metrics=[keras.metrics.categorical_accuracy])
 
 # Instantiates a toy dataset instance:
-dataset = tf.data.Dataset.from_tensor_slices((train, numeric_train_labels))
-dataset = dataset.batch(32)
-dataset = dataset.repeat()
+# dataset = tf.data.Dataset.from_tensor_slices((train, numeric_train_labels))
+# dataset = dataset.batch(32)
+# dataset = dataset.repeat()
 
 # Don't forget to specify `steps_per_epoch` when calling `fit` on a dataset.
 model.fit(train, numeric_train_labels, epochs=10, steps_per_epoch=30)
@@ -61,8 +61,8 @@ test_loss, test_acc = model.evaluate(test, numeric_test_labels)
 print('Test accuracy:', test_acc)
 
 
-# Save entire model to a HDF5 file
-model.save('modelo_keras_1.h5')
-
-# Recreate the exact same model, including weights and optimizer.
-model = keras.models.load_model('modelo_keras_1.h5')
+# # Save entire model to a HDF5 file
+# model.save('modelo_keras_1.h5')
+#
+# # Recreate the exact same model, including weights and optimizer.
+# model = keras.models.load_model('modelo_keras_1.h5')
