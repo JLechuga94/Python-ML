@@ -75,8 +75,8 @@ def concat_csv(folder_path):
     print("\nBeginning CSV files concatenation...")
     files_names = sorted(os.listdir(folder_path))[1:] # Range is done due to DS_store file in index 0
     csv_files = [pandas.read_csv(folder_path + file_name) for file_name in files_names]
-    new_csv = pandas.concat(csv_files, ignore_index=True, sort=True)
-    new_csv.to_csv(folder_path + "COMPLETE.csv")
+    new_csv = pandas.concat(csv_files, axis=0)
+    new_csv.to_csv(folder_path + "COMPLETE.csv", index=False)
     print("Finished CSV files concatenation")
     return True
 
@@ -106,10 +106,10 @@ def graph(x, y, t, original_y):
 # global_path = "../../../../../Downloads/"
 global_path = "../../../../../../Downloads/datasets/"
 # global_path = "audio_files/"
-patient_type = "normal"
+patient_type = "abnormal"
 
 # database = "CHALLENGE/"
-database = "MITDATASET/training-f/"
+database = "MITDATASET/validation/"
 specific_database_name = "Atraining_{}/".format(patient_type)
 # specific_database_name = "training-a/{}/".format(patient_type)
 database_path = global_path + database

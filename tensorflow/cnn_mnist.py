@@ -112,18 +112,18 @@ def main(unused_argv):
         num_epochs=1,
         shuffle=False)
 
-    # evaluation = mnist_classifier.evaluate(input_fn=eval_input_fn)
-    # print(evaluation)
+    evaluation = mnist_classifier.evaluate(input_fn=eval_input_fn)
+    print(evaluation)
 
-    # eval_results = list(mnist_classifier.predict(input_fn=eval_input_fn))
-    # print("------------------------------------")
-    # for index in range(10):
-    #     element = eval_results[index]
-    #     max_prob = np.argmax(element["probabilities"])
-    #     clase = element["classes"]
-    #     print("Index", index, "Real digit", eval_labels[index], "Predicted digit", clase)
-    #
-    # print("------------------------------------")
+    eval_results = list(mnist_classifier.predict(input_fn=eval_input_fn))
+    print("------------------------------------")
+    for index in range(10):
+        element = eval_results[index]
+        max_prob = np.argmax(element["probabilities"])
+        clase = element["classes"]
+        print("Index", index, "Real digit", eval_labels[index], "Predicted digit", clase)
+
+    print("------------------------------------")
 
 if __name__ == "__main__":
     tf.app.run()
